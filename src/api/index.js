@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const url = "https://mern-crud-memories-app.herokuapp.com/posts"
+const url = process.env.API_URL
 
 export const fetchPosts = () => axios.get(url)
 export const createPost = (newPost) => axios.post(url, newPost)
