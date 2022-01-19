@@ -1,18 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
-import { Form } from '../components/Form';
-import { Posts } from '../components/Post/Posts';
-import { Header } from '../components/Header';
-import { getPosts } from '../actions/posts';
+import { Form } from 'components/Form';
+import { Posts } from 'components/Post/Posts';
+import { Header } from 'components/Header';
+import { getPostsBySearch, getPosts } from 'actions/posts';
 
 const MemoriesScreen = () => {
   const [currentId, setCurrentId] = useState(null)
+  const [search, setSearch] = useState("")
   const dispatch = useDispatch();
+  const history = useHistory()
 
   useEffect(() => {
     dispatch(getPosts())
-  }, [currentId, dispatch])
+  }, [history, currentId, dispatch])
+
+  const searchPost = () => {
+    if (search) {
+      dispatch(getPostsBySearch({ search }))
+      history.push(`/search?q=${search}`)
+    } else {
+      dispatch(getPosts())
+      history.push("/")
+    }
+  }
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      searchPost()
+    }
+  }
 
   return (
     <>
@@ -28,7 +46,19 @@ const MemoriesScreen = () => {
           <Header />
           <div className="flex flex-col-reverse lg:flex-row  justify-between p-5 overflow-y-scroll overflow-x-hidden lg:overflow-hidden">
             <Posts setCurrentId={setCurrentId} />
-            <Form currentId={currentId} setCurrentId={setCurrentId} />
+            < div className="flex flex-col lg:w-4/12 space-y-2">
+              <div className="flex bg-white bg-opacity-60 px-5 py-3 rounded-xl">
+                <img className="w-4 mr-3" src="./search.svg" alt="Search Icon" />
+                <input
+                  className="bg-transparent outline-none w-full"
+                  type="text"
+                  value={search}
+                  onKeyPress={handleKeyPress}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search memories" />
+              </div>
+              <Form currentId={currentId} setCurrentId={setCurrentId} />
+            </div>
           </div>
         </section>
         <div className="rounded-full absolute -bottom-20 -left-10 bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm  shadow-xl" style={{ width: "350px", height: "350px" }}></div>

@@ -1,11 +1,25 @@
-import * as api from "../api"
-import { CREATE, DELETE, UPDATE, LIKE, FETCH_ALL } from "../constants/actionTypes";
+import * as api from "api"
+import { CREATE, DELETE, UPDATE, LIKE, FETCH_ALL, FETCH_BY_SEARCH, LOADING_TRUE, LOADING_FALSE } from "constants/actionTypes";
 
 export const getPosts = () => async (dispatch) => {
   try {
+    dispatch({ type: LOADING_TRUE })
     const { data } = await api.fetchPosts();
 
     dispatch({ type: FETCH_ALL, payload: data });
+    dispatch({ type: LOADING_FALSE })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getPostsBySearch = (searchQuery) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING_TRUE })
+    const { data } = await api.fetchPostsBySearch(searchQuery);
+
+    dispatch({ type: FETCH_BY_SEARCH, payload: data });
+    dispatch({ type: LOADING_FALSE })
   } catch (error) {
     console.log(error)
   }
@@ -42,8 +56,9 @@ export const deletePost = (id) => async (dispatch) => {
 }
 
 export const likePost = (id) => async (dispatch) => {
+  const user = JSON.parse(localStorage.getItem('profile'));
   try {
-    const { data } = await api.updatePost(id)
+    const { data } = await api.likePost(id, user?.token);
 
     dispatch({ type: LIKE, payload: data })
   } catch (error) {

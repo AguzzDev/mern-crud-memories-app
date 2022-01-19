@@ -1,8 +1,8 @@
 import React from 'react'
-import MemoriesScreen from './pages/MemoriesScreen'
+import { AppRouter } from './router/AppRouter'
 
 export const App = () => {
   return (
-    <MemoriesScreen />
+    <AppRouter />
   )
 }

@@ -1,9 +1,25 @@
 import axios from "axios"
 
-const url = process.env.API_URL
+const API = axios.create({
+  baseURL: "http://localhost:5555" || "https://mern-crud-memories-app.herokuapp.com",
+  headers: {
+    "Access-Control-Allow-Origin": "*"
+  }
+})
 
-export const fetchPosts = () => axios.get(url)
-export const createPost = (newPost) => axios.post(url, newPost)
-export const updatePost = (id, updatedPost) => axios.patch(`${url}/${id}`, updatedPost)
-export const deletePost = (id) => axios.delete(`${url}/${id}`)
-export const likePost = (id) => axios.patch(`${url}/${id}/likePost`)
+API.interceptors.request.use(req => {
+  if (localStorage.getItem("profile")) {
+    req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem("profile"))}`
+  }
+  return req
+})
+
+export const fetchPosts = () => API.get("/posts")
+export const fetchPostsBySearch = (searchQuery) => API.get(`/posts/search?q=${searchQuery.search || "none"}`)
+export const createPost = (newPost) => API.post("/posts", newPost)
+export const updatePost = (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost)
+export const deletePost = (id) => API.delete(`/posts/${id}`)
+export const likePost = (id) => API.patch(`/posts/${id}/likePost`)
+
+export const login = (user) => API.post("/user/login", user)
+export const register = (user) => API.post("/user/register", user)
