@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const API = axios.create({
-  baseURL: "http://localhost:5555" || "https://mern-crud-memories-app.herokuapp.com",
+  baseURL: "https://mern-crud-memories-app.herokuapp.com",
   headers: {
     "Access-Control-Allow-Origin": "*"
   }
