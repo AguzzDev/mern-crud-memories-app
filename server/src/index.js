@@ -9,17 +9,12 @@ import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 
 (() => {
-  const Whitelist = [
-    "http://localhost:3000",
-    "https://aguzzdev-twitter.netlify.app",
-  ];
-
   const app = express();
   const server = http.createServer(app);
 
   app.use(bodyParser.json({ limit: "30mb", extended: true }));
   app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-  app.use(cors({ origin: Whitelist }));
+  app.use(cors({ origin: process.env.CORS_ORIGIN }));
 
   app.use("/user", userRoutes);
   app.use("/post", postRoutes);

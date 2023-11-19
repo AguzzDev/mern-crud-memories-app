@@ -2,16 +2,20 @@ import axios from "axios";
 import { useLocalStorage } from "hook/useLocalStorage";
 
 const { user } = useLocalStorage();
+const env =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:4000"
+    : "http://api.memories-app.agustin-ribotta.xyz/";
 
 const API = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: env,
   headers: {
     "Access-Control-Allow-Origin": "*",
   },
 });
 
 const API_AUTH = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: env,
   headers: {
     "Access-Control-Allow-Origin": "*",
   },
