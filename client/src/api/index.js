@@ -5,7 +5,7 @@ const { user } = useLocalStorage();
 const env =
   process.env.NODE_ENV === "development"
     ? "http://localhost:4000"
-    : "http://api.memories-app.agustin-ribotta.xyz/";
+    : "https://api.memories-app.agustin-ribotta.xyz";
 
 const API = axios.create({
   baseURL: env,
